@@ -3,9 +3,6 @@
 Prototype aplikasi pemesanan venue 1. Fokus project ini adalah UI, struktur folder, navigasi, animasi, dan data statis.
 
 # Update UI Smooth 
-
-Versi ini sudah ditingkatkan agar tidak terlalu kaku:
-
 - Layout Home lebih mirip aplikasi booking/travel modern.
 - Category dibuat horizontal card/chip seperti aplikasi listing.
 - Card venue dibuat lebih besar dengan badge rating, harga, dan CTA detail.
