@@ -1,11 +1,8 @@
 # Lokasee Flutter Prototype
 
-Prototype aplikasi pemesanan venue sesuai PRD Progress 1. Fokus project ini adalah UI, struktur folder, navigasi, animasi, dan data statis.
+Prototype aplikasi pemesanan venue 1. Fokus project ini adalah UI, struktur folder, navigasi, animasi, dan data statis.
 
-## Update UI Smooth / Agoda-like
-
-Versi ini sudah ditingkatkan agar tidak terlalu kaku:
-
+# Update UI Smooth 
 - Layout Home lebih mirip aplikasi booking/travel modern.
 - Category dibuat horizontal card/chip seperti aplikasi listing.
 - Card venue dibuat lebih besar dengan badge rating, harga, dan CTA detail.
@@ -28,15 +25,8 @@ Versi ini sudah ditingkatkan agar tidak terlalu kaku:
 - `design/lokasee_animation_motion_spec.png`
 - `design/lokasee_color_palette.png`
 
-## Cara Menjalankan
 
-```bash
-cd lokasee_flutter
-flutter create .
-flutter pub get
-flutter run
-```
 
 ## Catatan
 
-Project ini belum memakai Firebase, database, upload gambar, pembayaran, atau booking asli. Semua data masih statis sesuai target Progress 1.
+Project ini belum memakai Firebase, database, upload gambar, pembayaran, atau booking asli. Semua data masih statis
