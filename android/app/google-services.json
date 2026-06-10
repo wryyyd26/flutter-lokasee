@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "99822796606",
+    "project_id": "lokasee-49f93",
+    "storage_bucket": "lokasee-49f93.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:99822796606:android:06eff7cfb89c8fee49b66f",
+        "android_client_info": {
+          "package_name": "com.example.venuebook"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDVDEDZTD9VLWYh1x8iJlRP1X0rH0NBJNE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
