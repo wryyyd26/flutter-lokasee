@@ -82,7 +82,8 @@ class _RegisterVenueScreenState extends State<RegisterVenueScreen> {
               decoration: BoxDecoration(
                 color: AppColors.white,
                 borderRadius: BorderRadius.circular(26),
-                border: Border.all(color: AppColors.neutral.withOpacity(0.12)),
+                border: Border.all(
+                    color: AppColors.neutral.withValues(alpha: 0.12)),
               ),
               child: const Column(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -120,7 +121,7 @@ class _RegisterVenueScreenState extends State<RegisterVenueScreen> {
           FadeSlideIn(
             delay: 170,
             child: DropdownButtonFormField<String>(
-              value: selectedCategory,
+              initialValue: selectedCategory,
               items: venueCategories
                   .map(
                     (category) => DropdownMenuItem(

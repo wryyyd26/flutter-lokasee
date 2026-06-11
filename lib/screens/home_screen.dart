@@ -110,7 +110,7 @@ class HomeScreen extends StatelessWidget {
                   borderRadius: BorderRadius.circular(24),
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.black.withOpacity(0.06),
+                      color: Colors.black.withValues(alpha: 0.06),
                       blurRadius: 22,
                       offset: const Offset(0, 12),
                     ),
@@ -142,7 +142,7 @@ class HomeScreen extends StatelessWidget {
                   borderRadius: BorderRadius.circular(32),
                   boxShadow: [
                     BoxShadow(
-                      color: AppColors.primary.withOpacity(0.28),
+                      color: AppColors.primary.withValues(alpha: 0.28),
                       blurRadius: 28,
                       offset: const Offset(0, 16),
                     ),
@@ -157,7 +157,7 @@ class HomeScreen extends StatelessWidget {
                         width: 126,
                         height: 126,
                         decoration: BoxDecoration(
-                          color: AppColors.accent.withOpacity(0.18),
+                          color: AppColors.accent.withValues(alpha: 0.18),
                           shape: BoxShape.circle,
                         ),
                       ),
@@ -286,7 +286,7 @@ class HomeScreen extends StatelessWidget {
                         borderRadius: BorderRadius.circular(26),
                         boxShadow: [
                           BoxShadow(
-                            color: AppColors.primary.withOpacity(0.06),
+                            color: AppColors.primary.withValues(alpha: 0.06),
                             blurRadius: 18,
                             offset: const Offset(0, 10),
                           ),
@@ -327,7 +327,8 @@ class HomeScreen extends StatelessWidget {
                                     vertical: 5,
                                   ),
                                   decoration: BoxDecoration(
-                                    color: AppColors.accent.withOpacity(0.1),
+                                    color:
+                                        AppColors.accent.withValues(alpha: 0.1),
                                     borderRadius: BorderRadius.circular(12),
                                   ),
                                   child: const Text(
@@ -457,7 +458,7 @@ class _CategoryPill extends StatelessWidget {
           borderRadius: BorderRadius.circular(26),
           boxShadow: [
             BoxShadow(
-              color: AppColors.primary.withOpacity(0.05),
+              color: AppColors.primary.withValues(alpha: 0.05),
               blurRadius: 16,
               offset: const Offset(0, 8),
             ),

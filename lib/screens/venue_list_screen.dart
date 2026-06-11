@@ -60,7 +60,7 @@ class VenueListScreen extends StatelessWidget {
                   borderRadius: BorderRadius.circular(24),
                   boxShadow: [
                     BoxShadow(
-                      color: AppColors.primary.withOpacity(0.18),
+                      color: AppColors.primary.withValues(alpha: 0.18),
                       blurRadius: 20,
                       offset: const Offset(0, 10),
                     ),
@@ -90,7 +90,7 @@ class VenueListScreen extends StatelessWidget {
                           Text(
                             '${filteredVenues.length} venue tersedia untuk kamu pilih.',
                             style: TextStyle(
-                              color: Colors.white.withOpacity(0.75),
+                              color: Colors.white.withValues(alpha: 0.75),
                               fontSize: 12,
                             ),
                           ),
@@ -102,10 +102,10 @@ class VenueListScreen extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 18),
-            FadeSlideIn(
+            const FadeSlideIn(
               delay: 130,
               child: Row(
-                children: const [
+                children: [
                   _FilterChip(text: 'Best match', selected: true),
                   SizedBox(width: 8),
                   _FilterChip(text: 'Termurah'),
@@ -137,7 +137,7 @@ class VenueListScreen extends StatelessWidget {
                         borderRadius: BorderRadius.circular(26),
                         boxShadow: [
                           BoxShadow(
-                            color: AppColors.primary.withOpacity(0.08),
+                            color: AppColors.primary.withValues(alpha: 0.08),
                             blurRadius: 22,
                             offset: const Offset(0, 12),
                           ),

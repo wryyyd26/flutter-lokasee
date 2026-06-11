@@ -48,7 +48,7 @@ class VenueDetailScreen extends StatelessWidget {
           color: AppColors.background,
           boxShadow: [
             BoxShadow(
-              color: AppColors.primary.withOpacity(0.08),
+              color: AppColors.primary.withValues(alpha: 0.08),
               blurRadius: 18,
               offset: const Offset(0, -8),
             ),
@@ -224,9 +224,9 @@ class VenueDetailScreen extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 24),
-            FadeSlideIn(
+            const FadeSlideIn(
               delay: 260,
-              child: const Text(
+              child: Text(
                 'Deskripsi',
                 style: TextStyle(
                   color: AppColors.primary,
@@ -313,7 +313,7 @@ class _InfoCard extends StatelessWidget {
         borderRadius: BorderRadius.circular(22),
         boxShadow: [
           BoxShadow(
-            color: AppColors.primary.withOpacity(0.06),
+            color: AppColors.primary.withValues(alpha: 0.06),
             blurRadius: 18,
             offset: const Offset(0, 8),
           ),

@@ -1,8 +1,10 @@
 import 'dart:async';
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import '../theme/app_colors.dart';
+import 'home_screen.dart';
 import 'login_screen.dart';
 
 class SplashScreen extends StatefulWidget {
@@ -18,9 +20,17 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
+
     Timer(const Duration(seconds: 2), () {
       if (!mounted) return;
-      Navigator.pushReplacementNamed(context, LoginScreen.routeName);
+
+      final user = FirebaseAuth.instance.currentUser;
+
+      if (user != null) {
+        Navigator.pushReplacementNamed(context, HomeScreen.routeName);
+      } else {
+        Navigator.pushReplacementNamed(context, LoginScreen.routeName);
+      }
     });
   }
 
@@ -41,13 +51,6 @@ class _SplashScreenState extends State<SplashScreen> {
                   decoration: BoxDecoration(
                     color: AppColors.accent,
                     borderRadius: BorderRadius.circular(32),
-                    boxShadow: [
-                      BoxShadow(
-                        color: AppColors.accent.withOpacity(0.35),
-                        blurRadius: 36,
-                        offset: const Offset(0, 18),
-                      ),
-                    ],
                   ),
                   child: const Icon(
                     Icons.event_available_rounded,
@@ -62,17 +65,14 @@ class _SplashScreenState extends State<SplashScreen> {
                     color: AppColors.white,
                     fontSize: 36,
                     fontWeight: FontWeight.w800,
-                    letterSpacing: 0.2,
                   ),
                 ),
                 const SizedBox(height: 10),
                 const Text(
                   'Booking venue jadi lebih mudah',
-                  textAlign: TextAlign.center,
                   style: TextStyle(
                     color: AppColors.background,
                     fontSize: 16,
-                    fontWeight: FontWeight.w500,
                   ),
                 ),
               ],
