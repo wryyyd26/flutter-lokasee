@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 
 import '../models/venue_model.dart';
+import '../screens/booking_screen.dart';
 import '../theme/app_colors.dart';
 import '../widgets/fade_slide_in.dart';
+import '../widgets/smooth_page_route.dart';
 
 class VenueDetailScreen extends StatelessWidget {
   final Venue venue;
@@ -12,27 +14,39 @@ class VenueDetailScreen extends StatelessWidget {
     required this.venue,
   });
 
-  void _showBookingDialog(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(22),
+  Widget _buildVenueImage() {
+    final imageUrl = venue.imageUrl.trim();
+
+    if (imageUrl.isEmpty) {
+      return Container(
+        height: 250,
+        width: double.infinity,
+        color: AppColors.primary,
+        alignment: Alignment.center,
+        child: const Icon(
+          Icons.location_city_rounded,
+          color: Colors.white,
+          size: 52,
+        ),
+      );
+    }
+
+    return Image.asset(
+      imageUrl,
+      height: 250,
+      width: double.infinity,
+      fit: BoxFit.cover,
+      errorBuilder: (context, error, stackTrace) {
+        return Container(
+          height: 250,
+          width: double.infinity,
+          color: AppColors.primary,
+          alignment: Alignment.center,
+          child: const Icon(
+            Icons.broken_image_outlined,
+            color: Colors.white,
+            size: 52,
           ),
-          title: const Text('Booking belum tersedia'),
-          content: const Text(
-            'Fitur booking akan dibuat pada progress berikutnya.',
-          ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(context),
-              child: const Text(
-                'Oke',
-                style: TextStyle(color: AppColors.accent),
-              ),
-            ),
-          ],
         );
       },
     );
@@ -60,7 +74,14 @@ class VenueDetailScreen extends StatelessWidget {
             child: SizedBox(
               height: 54,
               child: ElevatedButton.icon(
-                onPressed: () => _showBookingDialog(context),
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    SmoothPageRoute(
+                      page: BookingScreen(venue: venue),
+                    ),
+                  );
+                },
                 icon: const Icon(Icons.calendar_month_rounded),
                 label: const Text('Pesan Sekarang'),
                 style: ElevatedButton.styleFrom(
@@ -92,7 +113,10 @@ class VenueDetailScreen extends StatelessWidget {
                     backgroundColor: Colors.white,
                   ),
                   onPressed: () => Navigator.pop(context),
-                  icon: const Icon(Icons.arrow_back_ios_new_rounded, size: 18),
+                  icon: const Icon(
+                    Icons.arrow_back_ios_new_rounded,
+                    size: 18,
+                  ),
                 ),
                 const SizedBox(width: 8),
                 const Text(
@@ -114,25 +138,7 @@ class VenueDetailScreen extends StatelessWidget {
                     tag: venue.name,
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(28),
-                      child: Image.asset(
-                        venue.imageUrl,
-                        height: 250,
-                        width: double.infinity,
-                        fit: BoxFit.cover,
-                        errorBuilder: (context, error, stackTrace) {
-                          return Container(
-                            height: 250,
-                            width: double.infinity,
-                            color: AppColors.primary,
-                            alignment: Alignment.center,
-                            child: const Icon(
-                              Icons.broken_image_outlined,
-                              color: Colors.white,
-                              size: 52,
-                            ),
-                          );
-                        },
-                      ),
+                      child: _buildVenueImage(),
                     ),
                   ),
                   Positioned(
@@ -147,17 +153,18 @@ class VenueDetailScreen extends StatelessWidget {
                         color: Colors.white,
                         borderRadius: BorderRadius.circular(18),
                       ),
-                      child: const Row(
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
                         children: [
-                          Icon(
+                          const Icon(
                             Icons.star_rounded,
                             color: AppColors.accent,
                             size: 16,
                           ),
-                          SizedBox(width: 4),
+                          const SizedBox(width: 4),
                           Text(
-                            '4.8 Excellent',
-                            style: TextStyle(
+                            '${venue.rating} Excellent',
+                            style: const TextStyle(
                               color: AppColors.primary,
                               fontSize: 12,
                               fontWeight: FontWeight.w800,
@@ -277,7 +284,11 @@ class _InfoChip extends StatelessWidget {
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
-          Icon(icon, size: 15, color: AppColors.neutral),
+          Icon(
+            icon,
+            size: 15,
+            color: AppColors.neutral,
+          ),
           const SizedBox(width: 6),
           Text(
             text,
@@ -322,7 +333,11 @@ class _InfoCard extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Icon(icon, color: AppColors.accent, size: 22),
+          Icon(
+            icon,
+            color: AppColors.accent,
+            size: 22,
+          ),
           const SizedBox(height: 10),
           Text(
             label,

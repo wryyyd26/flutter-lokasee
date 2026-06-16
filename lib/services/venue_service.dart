@@ -48,4 +48,9 @@ class VenueService {
   Future<void> addVenue(Venue venue) async {
     await _db.collection('venues').add(venue.toMap());
   }
+
+  // Tambah booking baru
+  Future<void> addBooking(Booking booking) async {
+    await _db.collection('bookings').add(booking.toMap());
+  }
 }

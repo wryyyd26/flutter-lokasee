@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../models/venue_model.dart';
 import '../services/venue_service.dart';
 import '../screens/venue_detail_screen.dart';
+import '../screens/booking_screen.dart';
 import '../theme/app_colors.dart';
 import '../widgets/fade_slide_in.dart';
 import '../widgets/pressable_card.dart';
@@ -28,17 +29,14 @@ class VenueListScreen extends StatelessWidget {
         child: StreamBuilder<List<Venue>>(
           stream: venueService.getVenuesByCategory(category),
           builder: (context, snapshot) {
-            // Loading
             if (snapshot.connectionState == ConnectionState.waiting) {
               return const Center(child: CircularProgressIndicator());
             }
 
-            // Error
             if (snapshot.hasError) {
               return Center(child: Text('Error: ${snapshot.error}'));
             }
 
-            // Data
             final filteredVenues = snapshot.data ?? [];
 
             return ListView(
@@ -284,22 +282,35 @@ class VenueListScreen extends StatelessWidget {
                                               ),
                                             ),
                                           ),
-                                          Container(
-                                            padding: const EdgeInsets.symmetric(
-                                              horizontal: 14,
-                                              vertical: 9,
-                                            ),
-                                            decoration: BoxDecoration(
-                                              color: AppColors.accent,
-                                              borderRadius:
-                                                  BorderRadius.circular(18),
-                                            ),
-                                            child: const Text(
-                                              'Detail',
-                                              style: TextStyle(
-                                                color: Colors.white,
-                                                fontSize: 12,
-                                                fontWeight: FontWeight.w700,
+                                          GestureDetector(
+                                            onTap: () {
+                                              Navigator.push(
+                                                context,
+                                                SmoothPageRoute(
+                                                  page: BookingScreen(
+                                                    venue: venue,
+                                                  ),
+                                                ),
+                                              );
+                                            },
+                                            child: Container(
+                                              padding:
+                                                  const EdgeInsets.symmetric(
+                                                horizontal: 14,
+                                                vertical: 9,
+                                              ),
+                                              decoration: BoxDecoration(
+                                                color: AppColors.accent,
+                                                borderRadius:
+                                                    BorderRadius.circular(18),
+                                              ),
+                                              child: const Text(
+                                                'Pesan',
+                                                style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontSize: 12,
+                                                  fontWeight: FontWeight.w700,
+                                                ),
                                               ),
                                             ),
                                           ),
