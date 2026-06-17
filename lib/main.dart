@@ -7,6 +7,7 @@ import 'screens/home_screen.dart';
 import 'screens/login_screen.dart';
 import 'screens/register_screen.dart';
 import 'screens/splash_screen.dart';
+import 'screens/main_navigation_screen.dart'; // ✅ TAMBAHAN
 import 'theme/app_colors.dart';
 
 Future<void> main() async {
@@ -28,20 +29,15 @@ class LokaseeApp extends StatelessWidget {
       title: 'Lokasee',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        // Ini supaya Flutter Web tidak terlalu bergantung ke font Roboto online
-        // yang tadi gagal fetch dari fonts.gstatic.com.
         fontFamily: 'Arial',
-
         useMaterial3: true,
         scaffoldBackgroundColor: AppColors.background,
-
         colorScheme: ColorScheme.fromSeed(
           seedColor: AppColors.accent,
           primary: AppColors.primary,
           secondary: AppColors.accent,
           surface: AppColors.card,
         ),
-
         pageTransitionsTheme: const PageTransitionsTheme(
           builders: {
             TargetPlatform.android: ZoomPageTransitionsBuilder(),
@@ -51,7 +47,6 @@ class LokaseeApp extends StatelessWidget {
             TargetPlatform.linux: ZoomPageTransitionsBuilder(),
           },
         ),
-
         appBarTheme: const AppBarTheme(
           backgroundColor: AppColors.background,
           foregroundColor: AppColors.primary,
@@ -59,7 +54,6 @@ class LokaseeApp extends StatelessWidget {
           elevation: 0,
           scrolledUnderElevation: 0,
         ),
-
         inputDecorationTheme: InputDecorationTheme(
           filled: true,
           fillColor: AppColors.white,
@@ -96,15 +90,10 @@ class LokaseeApp extends StatelessWidget {
               width: 1.5,
             ),
           ),
-          labelStyle: const TextStyle(
-            color: AppColors.neutral,
-          ),
-          hintStyle: const TextStyle(
-            color: AppColors.neutral,
-          ),
+          labelStyle: const TextStyle(color: AppColors.neutral),
+          hintStyle: const TextStyle(color: AppColors.neutral),
           prefixIconColor: AppColors.neutral,
         ),
-
         elevatedButtonTheme: ElevatedButtonThemeData(
           style: ElevatedButton.styleFrom(
             minimumSize: const Size.fromHeight(54),
@@ -121,7 +110,6 @@ class LokaseeApp extends StatelessWidget {
             ),
           ),
         ),
-
         textButtonTheme: TextButtonThemeData(
           style: TextButton.styleFrom(
             foregroundColor: AppColors.accent,
@@ -131,7 +119,6 @@ class LokaseeApp extends StatelessWidget {
             ),
           ),
         ),
-
         outlinedButtonTheme: OutlinedButtonThemeData(
           style: OutlinedButton.styleFrom(
             minimumSize: const Size.fromHeight(54),
@@ -156,7 +143,12 @@ class LokaseeApp extends StatelessWidget {
         SplashScreen.routeName: (_) => const SplashScreen(),
         LoginScreen.routeName: (_) => const LoginScreen(),
         RegisterScreen.routeName: (_) => const RegisterScreen(),
+
+        // Home lama tetap ada (sementara)
         HomeScreen.routeName: (_) => const HomeScreen(),
+
+        // ✅ NAVIGASI BARU (BOTTOM NAV)
+        MainNavigationScreen.routeName: (_) => const MainNavigationScreen(),
       },
       onUnknownRoute: (settings) {
         return MaterialPageRoute(

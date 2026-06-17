@@ -4,8 +4,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import '../theme/app_colors.dart';
-import 'home_screen.dart';
 import 'login_screen.dart';
+import 'main_navigation_screen.dart'; // ✅ TAMBAHAN
 
 class SplashScreen extends StatefulWidget {
   static const String routeName = '/';
@@ -27,7 +27,11 @@ class _SplashScreenState extends State<SplashScreen> {
       final user = FirebaseAuth.instance.currentUser;
 
       if (user != null) {
-        Navigator.pushReplacementNamed(context, HomeScreen.routeName);
+        // ✅ LANGSUNG KE BOTTOM NAV
+        Navigator.pushReplacementNamed(
+          context,
+          MainNavigationScreen.routeName,
+        );
       } else {
         Navigator.pushReplacementNamed(context, LoginScreen.routeName);
       }

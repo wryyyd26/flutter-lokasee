@@ -2,7 +2,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
 import '../theme/app_colors.dart';
-import 'home_screen.dart';
+import 'main_navigation_screen.dart'; // ✅ FIX INI
 import 'register_screen.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -42,9 +42,10 @@ class _LoginScreenState extends State<LoginScreen> {
 
       if (!mounted) return;
 
+      // ✅ FIX UTAMA: masuk ke Bottom Navigation
       Navigator.pushNamedAndRemoveUntil(
         context,
-        HomeScreen.routeName,
+        MainNavigationScreen.routeName,
         (route) => false,
       );
     } on FirebaseAuthException catch (e) {
@@ -116,6 +117,8 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                 ),
                 const SizedBox(height: 34),
+
+                // EMAIL
                 TextFormField(
                   controller: _emailController,
                   keyboardType: TextInputType.emailAddress,
@@ -133,7 +136,10 @@ class _LoginScreenState extends State<LoginScreen> {
                     return null;
                   },
                 ),
+
                 const SizedBox(height: 16),
+
+                // PASSWORD
                 TextFormField(
                   controller: _passwordController,
                   obscureText: _obscurePassword,
@@ -163,7 +169,10 @@ class _LoginScreenState extends State<LoginScreen> {
                     return null;
                   },
                 ),
+
                 const SizedBox(height: 26),
+
+                // BUTTON LOGIN
                 ElevatedButton(
                   onPressed: _isLoading ? null : _login,
                   child: _isLoading
@@ -177,7 +186,10 @@ class _LoginScreenState extends State<LoginScreen> {
                         )
                       : const Text('Login'),
                 ),
+
                 const SizedBox(height: 22),
+
+                // REGISTER
                 Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
@@ -187,7 +199,10 @@ class _LoginScreenState extends State<LoginScreen> {
                     ),
                     TextButton(
                       onPressed: () {
-                        Navigator.pushNamed(context, RegisterScreen.routeName);
+                        Navigator.pushNamed(
+                          context,
+                          RegisterScreen.routeName,
+                        );
                       },
                       child: const Text(
                         'Daftar',
