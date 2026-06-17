@@ -21,6 +21,8 @@ class _RegisterVenueScreenState extends State<RegisterVenueScreen> {
   final TextEditingController _priceController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
   final TextEditingController _imageUrlController = TextEditingController();
+  final TextEditingController _latitudeController = TextEditingController();
+  final TextEditingController _longitudeController = TextEditingController();
 
   String selectedCategory = venueCategories.first;
   bool _isLoading = false;
@@ -47,6 +49,9 @@ class _RegisterVenueScreenState extends State<RegisterVenueScreen> {
       final formattedPrice =
           rawPrice.toLowerCase().contains('rp') ? rawPrice : 'Rp $rawPrice';
 
+      final latitude = double.parse(_latitudeController.text.trim());
+      final longitude = double.parse(_longitudeController.text.trim());
+
       await FirebaseFirestore.instance.collection('venues').add({
         'name': _nameController.text.trim(),
         'category': selectedCategory,
@@ -55,6 +60,8 @@ class _RegisterVenueScreenState extends State<RegisterVenueScreen> {
         'description': _descriptionController.text.trim(),
         'imageUrl': _imageUrlController.text.trim(),
         'rating': 0.0,
+        'latitude': latitude,
+        'longitude': longitude,
         'ownerId': user.uid,
         'status': 'active',
         'createdAt': FieldValue.serverTimestamp(),
@@ -94,6 +101,8 @@ class _RegisterVenueScreenState extends State<RegisterVenueScreen> {
     _priceController.dispose();
     _descriptionController.dispose();
     _imageUrlController.dispose();
+    _latitudeController.dispose();
+    _longitudeController.dispose();
     super.dispose();
   }
 
@@ -146,7 +155,7 @@ class _RegisterVenueScreenState extends State<RegisterVenueScreen> {
                     ),
                     SizedBox(height: 10),
                     Text(
-                      'Isi informasi venue dan masukkan link URL gambar agar venue bisa tampil dengan foto.',
+                      'Isi informasi venue, URL gambar, serta koordinat lokasi agar venue bisa tampil dan dihitung jaraknya.',
                       style: TextStyle(
                         color: AppColors.background,
                         height: 1.45,
@@ -303,6 +312,7 @@ class _RegisterVenueScreenState extends State<RegisterVenueScreen> {
                 controller: _locationController,
                 decoration: const InputDecoration(
                   labelText: 'Lokasi Venue',
+                  hintText: 'Contoh: Surabaya, Jawa Timur',
                   prefixIcon: Icon(Icons.location_on_outlined),
                 ),
                 validator: (value) {
@@ -315,7 +325,73 @@ class _RegisterVenueScreenState extends State<RegisterVenueScreen> {
             ),
             const SizedBox(height: 14),
             FadeSlideIn(
+              delay: 230,
+              child: TextFormField(
+                controller: _latitudeController,
+                keyboardType: const TextInputType.numberWithOptions(
+                  decimal: true,
+                  signed: true,
+                ),
+                decoration: const InputDecoration(
+                  labelText: 'Latitude',
+                  hintText: 'Contoh: -7.337123',
+                  prefixIcon: Icon(Icons.map_outlined),
+                ),
+                validator: (value) {
+                  if (value == null || value.trim().isEmpty) {
+                    return 'Latitude wajib diisi';
+                  }
+
+                  final latitude = double.tryParse(value.trim());
+
+                  if (latitude == null) {
+                    return 'Latitude harus berupa angka';
+                  }
+
+                  if (latitude < -90 || latitude > 90) {
+                    return 'Latitude harus antara -90 sampai 90';
+                  }
+
+                  return null;
+                },
+              ),
+            ),
+            const SizedBox(height: 14),
+            FadeSlideIn(
               delay: 250,
+              child: TextFormField(
+                controller: _longitudeController,
+                keyboardType: const TextInputType.numberWithOptions(
+                  decimal: true,
+                  signed: true,
+                ),
+                decoration: const InputDecoration(
+                  labelText: 'Longitude',
+                  hintText: 'Contoh: 112.784567',
+                  prefixIcon: Icon(Icons.near_me_outlined),
+                ),
+                validator: (value) {
+                  if (value == null || value.trim().isEmpty) {
+                    return 'Longitude wajib diisi';
+                  }
+
+                  final longitude = double.tryParse(value.trim());
+
+                  if (longitude == null) {
+                    return 'Longitude harus berupa angka';
+                  }
+
+                  if (longitude < -180 || longitude > 180) {
+                    return 'Longitude harus antara -180 sampai 180';
+                  }
+
+                  return null;
+                },
+              ),
+            ),
+            const SizedBox(height: 14),
+            FadeSlideIn(
+              delay: 270,
               child: TextFormField(
                 controller: _priceController,
                 keyboardType: TextInputType.text,
@@ -334,7 +410,7 @@ class _RegisterVenueScreenState extends State<RegisterVenueScreen> {
             ),
             const SizedBox(height: 14),
             FadeSlideIn(
-              delay: 290,
+              delay: 310,
               child: TextFormField(
                 controller: _descriptionController,
                 maxLines: 4,
@@ -353,7 +429,7 @@ class _RegisterVenueScreenState extends State<RegisterVenueScreen> {
             ),
             const SizedBox(height: 24),
             FadeSlideIn(
-              delay: 330,
+              delay: 350,
               child: ElevatedButton.icon(
                 onPressed: _isLoading ? null : _saveVenue,
                 icon: _isLoading

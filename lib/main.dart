@@ -11,9 +11,11 @@ import 'theme/app_colors.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
+
   runApp(const LokaseeApp());
 }
 
@@ -26,20 +28,30 @@ class LokaseeApp extends StatelessWidget {
       title: 'Lokasee',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
+        // Ini supaya Flutter Web tidak terlalu bergantung ke font Roboto online
+        // yang tadi gagal fetch dari fonts.gstatic.com.
+        fontFamily: 'Arial',
+
         useMaterial3: true,
         scaffoldBackgroundColor: AppColors.background,
+
         colorScheme: ColorScheme.fromSeed(
           seedColor: AppColors.accent,
           primary: AppColors.primary,
           secondary: AppColors.accent,
           surface: AppColors.card,
         ),
+
         pageTransitionsTheme: const PageTransitionsTheme(
           builders: {
             TargetPlatform.android: ZoomPageTransitionsBuilder(),
             TargetPlatform.iOS: CupertinoPageTransitionsBuilder(),
+            TargetPlatform.windows: ZoomPageTransitionsBuilder(),
+            TargetPlatform.macOS: CupertinoPageTransitionsBuilder(),
+            TargetPlatform.linux: ZoomPageTransitionsBuilder(),
           },
         ),
+
         appBarTheme: const AppBarTheme(
           backgroundColor: AppColors.background,
           foregroundColor: AppColors.primary,
@@ -47,6 +59,7 @@ class LokaseeApp extends StatelessWidget {
           elevation: 0,
           scrolledUnderElevation: 0,
         ),
+
         inputDecorationTheme: InputDecorationTheme(
           filled: true,
           fillColor: AppColors.white,
@@ -58,6 +71,10 @@ class LokaseeApp extends StatelessWidget {
             borderRadius: BorderRadius.circular(18),
             borderSide: BorderSide.none,
           ),
+          enabledBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(18),
+            borderSide: BorderSide.none,
+          ),
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(18),
             borderSide: const BorderSide(
@@ -65,11 +82,29 @@ class LokaseeApp extends StatelessWidget {
               width: 1.5,
             ),
           ),
+          errorBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(18),
+            borderSide: const BorderSide(
+              color: Colors.redAccent,
+              width: 1.2,
+            ),
+          ),
+          focusedErrorBorder: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(18),
+            borderSide: const BorderSide(
+              color: Colors.redAccent,
+              width: 1.5,
+            ),
+          ),
           labelStyle: const TextStyle(
+            color: AppColors.neutral,
+          ),
+          hintStyle: const TextStyle(
             color: AppColors.neutral,
           ),
           prefixIconColor: AppColors.neutral,
         ),
+
         elevatedButtonTheme: ElevatedButtonThemeData(
           style: ElevatedButton.styleFrom(
             minimumSize: const Size.fromHeight(54),
@@ -79,6 +114,36 @@ class LokaseeApp extends StatelessWidget {
             textStyle: const TextStyle(
               fontSize: 16,
               fontWeight: FontWeight.w700,
+              fontFamily: 'Arial',
+            ),
+            shape: RoundedRectangleBorder(
+              borderRadius: BorderRadius.circular(18),
+            ),
+          ),
+        ),
+
+        textButtonTheme: TextButtonThemeData(
+          style: TextButton.styleFrom(
+            foregroundColor: AppColors.accent,
+            textStyle: const TextStyle(
+              fontWeight: FontWeight.w600,
+              fontFamily: 'Arial',
+            ),
+          ),
+        ),
+
+        outlinedButtonTheme: OutlinedButtonThemeData(
+          style: OutlinedButton.styleFrom(
+            minimumSize: const Size.fromHeight(54),
+            foregroundColor: AppColors.accent,
+            side: const BorderSide(
+              color: AppColors.accent,
+              width: 1.2,
+            ),
+            textStyle: const TextStyle(
+              fontSize: 16,
+              fontWeight: FontWeight.w700,
+              fontFamily: 'Arial',
             ),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(18),
@@ -92,6 +157,11 @@ class LokaseeApp extends StatelessWidget {
         LoginScreen.routeName: (_) => const LoginScreen(),
         RegisterScreen.routeName: (_) => const RegisterScreen(),
         HomeScreen.routeName: (_) => const HomeScreen(),
+      },
+      onUnknownRoute: (settings) {
+        return MaterialPageRoute(
+          builder: (_) => const LoginScreen(),
+        );
       },
     );
   }

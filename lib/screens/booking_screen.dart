@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../models/venue_model.dart';
+import '../services/venue_service.dart';
 import '../theme/app_colors.dart';
 
 class BookingScreen extends StatefulWidget {
@@ -16,6 +17,8 @@ class BookingScreen extends StatefulWidget {
 }
 
 class _BookingScreenState extends State<BookingScreen> {
+  final VenueService _venueService = VenueService();
+
   DateTime _selectedDate = DateTime.now();
   String _selectedTime = '10:00';
   int _selectedDuration = 1;
@@ -134,19 +137,47 @@ class _BookingScreenState extends State<BookingScreen> {
   Future<void> _confirmBooking() async {
     setState(() => _isLoading = true);
 
-    await Future.delayed(const Duration(milliseconds: 600));
+    try {
+      final bookingTime = _isDailyRental ? 'Full Day' : _selectedTime;
+      final duration = _isDailyRental ? 1 : _selectedDuration;
+      final note = _noteController.text.trim();
 
-    if (!mounted) return;
+      await _venueService.createBooking(
+        venue: widget.venue,
+        bookingDate: _selectedDate,
+        bookingDateText: _formatFullDate(_selectedDate),
+        bookingTime: bookingTime,
+        duration: duration,
+        totalPrice: _totalPrice,
+        note: note,
+      );
 
-    setState(() => _isLoading = false);
+      if (!mounted) return;
 
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content:
-            Text('Booking UI berhasil. Firebase disambungkan setelah ini.'),
-        backgroundColor: AppColors.primary,
-      ),
-    );
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text(
+            'Booking berhasil dikirim. Menunggu persetujuan owner.',
+          ),
+          backgroundColor: AppColors.primary,
+        ),
+      );
+
+      Navigator.pop(context);
+    } catch (e) {
+      if (!mounted) return;
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Gagal membuat booking: $e'),
+          backgroundColor: Colors.red,
+        ),
+      );
+    } finally {
+      if (mounted) {
+        setState(() => _isLoading = false);
+      }
+    }
   }
 
   @override
