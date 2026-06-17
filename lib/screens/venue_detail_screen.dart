@@ -5,6 +5,7 @@ import '../screens/booking_screen.dart';
 import '../theme/app_colors.dart';
 import '../widgets/fade_slide_in.dart';
 import '../widgets/smooth_page_route.dart';
+import '../widgets/venue_image.dart';
 
 class VenueDetailScreen extends StatelessWidget {
   final Venue venue;
@@ -15,40 +16,11 @@ class VenueDetailScreen extends StatelessWidget {
   });
 
   Widget _buildVenueImage() {
-    final imageUrl = venue.imageUrl.trim();
-
-    if (imageUrl.isEmpty) {
-      return Container(
-        height: 250,
-        width: double.infinity,
-        color: AppColors.primary,
-        alignment: Alignment.center,
-        child: const Icon(
-          Icons.location_city_rounded,
-          color: Colors.white,
-          size: 52,
-        ),
-      );
-    }
-
-    return Image.asset(
-      imageUrl,
+    return VenueImage(
+      imageUrl: venue.imageUrl,
       height: 250,
       width: double.infinity,
       fit: BoxFit.cover,
-      errorBuilder: (context, error, stackTrace) {
-        return Container(
-          height: 250,
-          width: double.infinity,
-          color: AppColors.primary,
-          alignment: Alignment.center,
-          child: const Icon(
-            Icons.broken_image_outlined,
-            color: Colors.white,
-            size: 52,
-          ),
-        );
-      },
     );
   }
 

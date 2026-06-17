@@ -8,6 +8,7 @@ import '../theme/app_colors.dart';
 import '../widgets/fade_slide_in.dart';
 import '../widgets/pressable_card.dart';
 import '../widgets/smooth_page_route.dart';
+import '../widgets/venue_image.dart';
 
 class VenueListScreen extends StatelessWidget {
   final String category;
@@ -49,8 +50,10 @@ class VenueListScreen extends StatelessWidget {
                         backgroundColor: Colors.white,
                       ),
                       onPressed: () => Navigator.pop(context),
-                      icon: const Icon(Icons.arrow_back_ios_new_rounded,
-                          size: 18),
+                      icon: const Icon(
+                        Icons.arrow_back_ios_new_rounded,
+                        size: 18,
+                      ),
                     ),
                     const SizedBox(width: 8),
                     Expanded(
@@ -140,6 +143,7 @@ class VenueListScreen extends StatelessWidget {
                 else
                   ...List.generate(filteredVenues.length, (index) {
                     final venue = filteredVenues[index];
+
                     return FadeSlideIn(
                       delay: 180 + (index * 90),
                       child: Padding(
@@ -178,25 +182,11 @@ class VenueListScreen extends StatelessWidget {
                                           topLeft: Radius.circular(26),
                                           topRight: Radius.circular(26),
                                         ),
-                                        child: Image.asset(
-                                          venue.imageUrl,
+                                        child: VenueImage(
+                                          imageUrl: venue.imageUrl,
                                           height: 165,
                                           width: double.infinity,
                                           fit: BoxFit.cover,
-                                          errorBuilder:
-                                              (context, error, stackTrace) {
-                                            return Container(
-                                              height: 165,
-                                              width: double.infinity,
-                                              color: AppColors.primary,
-                                              alignment: Alignment.center,
-                                              child: const Icon(
-                                                Icons.broken_image_outlined,
-                                                color: Colors.white,
-                                                size: 42,
-                                              ),
-                                            );
-                                          },
                                         ),
                                       ),
                                     ),

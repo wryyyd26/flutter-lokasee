@@ -7,6 +7,8 @@ import '../theme/app_colors.dart';
 import '../widgets/fade_slide_in.dart';
 import '../widgets/pressable_card.dart';
 import '../widgets/smooth_page_route.dart';
+import '../widgets/venue_image.dart';
+import 'login_screen.dart';
 import 'register_venue_screen.dart';
 import 'venue_list_screen.dart';
 
@@ -45,6 +47,18 @@ class HomeScreen extends StatelessWidget {
       default:
         return 'Venue pilihan';
     }
+  }
+
+  Future<void> _logout(BuildContext context) async {
+    await FirebaseAuth.instance.signOut();
+
+    if (!context.mounted) return;
+
+    Navigator.pushNamedAndRemoveUntil(
+      context,
+      LoginScreen.routeName,
+      (route) => false,
+    );
   }
 
   @override
@@ -99,9 +113,7 @@ class HomeScreen extends StatelessWidget {
                     ),
                   ),
                   GestureDetector(
-                    onTap: () async {
-                      await FirebaseAuth.instance.signOut();
-                    },
+                    onTap: () => _logout(context),
                     child: Container(
                       width: 42,
                       height: 42,
@@ -205,8 +217,9 @@ class HomeScreen extends StatelessWidget {
                               backgroundColor: AppColors.accent,
                               foregroundColor: AppColors.white,
                               minimumSize: const Size(0, 44),
-                              padding:
-                                  const EdgeInsets.symmetric(horizontal: 16),
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 16,
+                              ),
                               shape: RoundedRectangleBorder(
                                 borderRadius: BorderRadius.circular(16),
                               ),
@@ -311,10 +324,12 @@ class HomeScreen extends StatelessWidget {
                 }
 
                 final venues = snapshot.data!;
+
                 return Column(
                   children:
                       venues.take(3).toList().asMap().entries.map((entry) {
                     final venue = entry.value;
+
                     return FadeSlideIn(
                       delay: 280 + (entry.key * 70),
                       child: Padding(
@@ -338,8 +353,9 @@ class HomeScreen extends StatelessWidget {
                               borderRadius: BorderRadius.circular(26),
                               boxShadow: [
                                 BoxShadow(
-                                  color:
-                                      AppColors.primary.withValues(alpha: 0.06),
+                                  color: AppColors.primary.withValues(
+                                    alpha: 0.06,
+                                  ),
                                   blurRadius: 18,
                                   offset: const Offset(0, 10),
                                 ),
@@ -349,24 +365,11 @@ class HomeScreen extends StatelessWidget {
                               children: [
                                 ClipRRect(
                                   borderRadius: BorderRadius.circular(22),
-                                  child: Image.asset(
-                                    venue.imageUrl,
+                                  child: VenueImage(
+                                    imageUrl: venue.imageUrl,
                                     width: 92,
                                     height: 92,
                                     fit: BoxFit.cover,
-                                    errorBuilder: (context, error, stackTrace) {
-                                      return Container(
-                                        width: 92,
-                                        height: 92,
-                                        color: AppColors.primary,
-                                        alignment: Alignment.center,
-                                        child: Icon(
-                                          _categoryIcon(venue.category),
-                                          color: AppColors.accent,
-                                          size: 36,
-                                        ),
-                                      );
-                                    },
                                   ),
                                 ),
                                 const SizedBox(width: 14),
@@ -381,8 +384,9 @@ class HomeScreen extends StatelessWidget {
                                           vertical: 5,
                                         ),
                                         decoration: BoxDecoration(
-                                          color: AppColors.accent
-                                              .withValues(alpha: 0.1),
+                                          color: AppColors.accent.withValues(
+                                            alpha: 0.1,
+                                          ),
                                           borderRadius:
                                               BorderRadius.circular(12),
                                         ),
