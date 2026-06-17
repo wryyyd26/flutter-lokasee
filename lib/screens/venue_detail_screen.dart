@@ -15,21 +15,35 @@ class VenueDetailScreen extends StatelessWidget {
     required this.venue,
   });
 
-  Widget _buildVenueImage() {
+  Widget _buildVenueImage(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+
     return VenueImage(
       imageUrl: venue.imageUrl,
-      height: 250,
+      height: screenWidth < 380 ? 200 : 250,
       width: double.infinity,
       fit: BoxFit.cover,
     );
   }
 
+  String _safeText(String value, {String fallback = '-'}) {
+    final text = value.trim();
+    return text.isEmpty ? fallback : text;
+  }
+
   @override
   Widget build(BuildContext context) {
+    final bottomPadding = MediaQuery.of(context).padding.bottom;
+
     return Scaffold(
       backgroundColor: AppColors.background,
       bottomNavigationBar: Container(
-        padding: const EdgeInsets.fromLTRB(20, 12, 20, 20),
+        padding: EdgeInsets.fromLTRB(
+          20,
+          12,
+          20,
+          bottomPadding > 0 ? bottomPadding + 12 : 20,
+        ),
         decoration: BoxDecoration(
           color: AppColors.background,
           boxShadow: [
@@ -40,33 +54,31 @@ class VenueDetailScreen extends StatelessWidget {
             ),
           ],
         ),
-        child: SafeArea(
-          child: FadeSlideIn(
-            delay: 350,
-            child: SizedBox(
-              height: 54,
-              child: ElevatedButton.icon(
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    SmoothPageRoute(
-                      page: BookingScreen(venue: venue),
-                    ),
-                  );
-                },
-                icon: const Icon(Icons.calendar_month_rounded),
-                label: const Text('Pesan Sekarang'),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: AppColors.accent,
-                  foregroundColor: Colors.white,
-                  elevation: 0,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(18),
+        child: FadeSlideIn(
+          delay: 350,
+          child: SizedBox(
+            height: 54,
+            child: ElevatedButton.icon(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  SmoothPageRoute(
+                    page: BookingScreen(venue: venue),
                   ),
-                  textStyle: const TextStyle(
-                    fontSize: 15,
-                    fontWeight: FontWeight.w800,
-                  ),
+                );
+              },
+              icon: const Icon(Icons.calendar_month_rounded),
+              label: const Text('Pesan Sekarang'),
+              style: ElevatedButton.styleFrom(
+                backgroundColor: AppColors.accent,
+                foregroundColor: Colors.white,
+                elevation: 0,
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(18),
+                ),
+                textStyle: const TextStyle(
+                  fontSize: 15,
+                  fontWeight: FontWeight.w800,
                 ),
               ),
             ),
@@ -76,7 +88,7 @@ class VenueDetailScreen extends StatelessWidget {
       body: SafeArea(
         bottom: false,
         child: ListView(
-          padding: const EdgeInsets.fromLTRB(20, 20, 20, 110),
+          padding: const EdgeInsets.fromLTRB(20, 20, 20, 130),
           children: [
             Row(
               children: [
@@ -91,12 +103,16 @@ class VenueDetailScreen extends StatelessWidget {
                   ),
                 ),
                 const SizedBox(width: 8),
-                const Text(
-                  'Detail Venue',
-                  style: TextStyle(
-                    color: AppColors.primary,
-                    fontSize: 22,
-                    fontWeight: FontWeight.w800,
+                const Expanded(
+                  child: Text(
+                    'Detail Venue',
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(
+                      color: AppColors.primary,
+                      fontSize: 22,
+                      fontWeight: FontWeight.w800,
+                    ),
                   ),
                 ),
               ],
@@ -110,13 +126,16 @@ class VenueDetailScreen extends StatelessWidget {
                     tag: venue.name,
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(28),
-                      child: _buildVenueImage(),
+                      child: _buildVenueImage(context),
                     ),
                   ),
                   Positioned(
                     top: 14,
                     left: 14,
                     child: Container(
+                      constraints: BoxConstraints(
+                        maxWidth: MediaQuery.of(context).size.width - 68,
+                      ),
                       padding: const EdgeInsets.symmetric(
                         horizontal: 12,
                         vertical: 7,
@@ -134,12 +153,16 @@ class VenueDetailScreen extends StatelessWidget {
                             size: 16,
                           ),
                           const SizedBox(width: 4),
-                          Text(
-                            '${venue.rating} Excellent',
-                            style: const TextStyle(
-                              color: AppColors.primary,
-                              fontSize: 12,
-                              fontWeight: FontWeight.w800,
+                          Flexible(
+                            child: Text(
+                              '${venue.rating} Excellent',
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: const TextStyle(
+                                color: AppColors.primary,
+                                fontSize: 12,
+                                fontWeight: FontWeight.w800,
+                              ),
                             ),
                           ),
                         ],
@@ -153,7 +176,9 @@ class VenueDetailScreen extends StatelessWidget {
             FadeSlideIn(
               delay: 140,
               child: Text(
-                venue.name,
+                _safeText(venue.name, fallback: 'Nama venue tidak tersedia'),
+                maxLines: 3,
+                overflow: TextOverflow.ellipsis,
                 style: const TextStyle(
                   color: AppColors.primary,
                   fontSize: 26,
@@ -164,17 +189,18 @@ class VenueDetailScreen extends StatelessWidget {
             const SizedBox(height: 12),
             FadeSlideIn(
               delay: 180,
-              child: Wrap(
-                spacing: 8,
-                runSpacing: 8,
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   _InfoChip(
                     icon: Icons.category_outlined,
-                    text: venue.category,
+                    text: _safeText(venue.category),
                   ),
+                  const SizedBox(height: 8),
                   _InfoChip(
                     icon: Icons.location_on_outlined,
-                    text: venue.location,
+                    text: _safeText(venue.location),
+                    maxLines: 2,
                   ),
                 ],
               ),
@@ -182,24 +208,44 @@ class VenueDetailScreen extends StatelessWidget {
             const SizedBox(height: 20),
             FadeSlideIn(
               delay: 220,
-              child: Row(
-                children: [
-                  Expanded(
-                    child: _InfoCard(
-                      icon: Icons.payments_outlined,
-                      label: 'Harga',
-                      value: venue.price,
-                    ),
-                  ),
-                  const SizedBox(width: 12),
-                  const Expanded(
-                    child: _InfoCard(
-                      icon: Icons.access_time_rounded,
-                      label: 'Jam buka',
-                      value: '08.00 - 22.00',
-                    ),
-                  ),
-                ],
+              child: LayoutBuilder(
+                builder: (context, constraints) {
+                  final isSmall = constraints.maxWidth < 360;
+
+                  if (isSmall) {
+                    return Column(
+                      children: [
+                        _InfoCard(
+                          icon: Icons.payments_outlined,
+                          label: 'Harga',
+                          value: _safeText(venue.price),
+                        ),
+                        const SizedBox(height: 12),
+                        const _InfoCard(
+                          icon: Icons.access_time_rounded,
+                          label: 'Jam buka',
+                          value: '08.00 - 22.00',
+                        ),
+                      ],
+                    );
+                  }
+
+                  return const Row(
+                    children: [
+                      Expanded(
+                        child: _PriceCardPlaceholder(),
+                      ),
+                      SizedBox(width: 12),
+                      Expanded(
+                        child: _InfoCard(
+                          icon: Icons.access_time_rounded,
+                          label: 'Jam buka',
+                          value: '08.00 - 22.00',
+                        ),
+                      ),
+                    ],
+                  );
+                },
               ),
             ),
             const SizedBox(height: 24),
@@ -218,7 +264,10 @@ class VenueDetailScreen extends StatelessWidget {
             FadeSlideIn(
               delay: 300,
               child: Text(
-                venue.description,
+                _safeText(
+                  venue.description,
+                  fallback: 'Deskripsi venue belum tersedia.',
+                ),
                 style: const TextStyle(
                   color: AppColors.neutral,
                   fontSize: 14,
@@ -233,18 +282,45 @@ class VenueDetailScreen extends StatelessWidget {
   }
 }
 
+class _PriceCardPlaceholder extends StatelessWidget {
+  const _PriceCardPlaceholder();
+
+  @override
+  Widget build(BuildContext context) {
+    final detailScreen =
+        context.findAncestorWidgetOfExactType<VenueDetailScreen>();
+
+    final price = detailScreen?.venue.price.trim().isEmpty ?? true
+        ? '-'
+        : detailScreen!.venue.price;
+
+    return _InfoCard(
+      icon: Icons.payments_outlined,
+      label: 'Harga',
+      value: price,
+    );
+  }
+}
+
 class _InfoChip extends StatelessWidget {
   final IconData icon;
   final String text;
+  final int maxLines;
 
   const _InfoChip({
     required this.icon,
     required this.text,
+    this.maxLines = 1,
   });
 
   @override
   Widget build(BuildContext context) {
+    final maxWidth = MediaQuery.of(context).size.width - 40;
+
     return Container(
+      constraints: BoxConstraints(
+        maxWidth: maxWidth,
+      ),
       padding: const EdgeInsets.symmetric(
         horizontal: 12,
         vertical: 9,
@@ -255,19 +331,29 @@ class _InfoChip extends StatelessWidget {
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment:
+            maxLines > 1 ? CrossAxisAlignment.start : CrossAxisAlignment.center,
         children: [
-          Icon(
-            icon,
-            size: 15,
-            color: AppColors.neutral,
+          Padding(
+            padding: EdgeInsets.only(top: maxLines > 1 ? 2 : 0),
+            child: Icon(
+              icon,
+              size: 15,
+              color: AppColors.neutral,
+            ),
           ),
           const SizedBox(width: 6),
-          Text(
-            text,
-            style: const TextStyle(
-              color: AppColors.neutral,
-              fontSize: 12,
-              fontWeight: FontWeight.w600,
+          Flexible(
+            child: Text(
+              text,
+              maxLines: maxLines,
+              overflow: TextOverflow.ellipsis,
+              softWrap: true,
+              style: const TextStyle(
+                color: AppColors.neutral,
+                fontSize: 12,
+                fontWeight: FontWeight.w600,
+              ),
             ),
           ),
         ],
@@ -290,6 +376,7 @@ class _InfoCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
+      width: double.infinity,
       padding: const EdgeInsets.all(14),
       decoration: BoxDecoration(
         color: Colors.white,
@@ -313,6 +400,8 @@ class _InfoCard extends StatelessWidget {
           const SizedBox(height: 10),
           Text(
             label,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
             style: const TextStyle(
               color: AppColors.neutral,
               fontSize: 12,
@@ -321,6 +410,8 @@ class _InfoCard extends StatelessWidget {
           const SizedBox(height: 4),
           Text(
             value,
+            maxLines: 2,
+            overflow: TextOverflow.ellipsis,
             style: const TextStyle(
               color: AppColors.primary,
               fontSize: 13,

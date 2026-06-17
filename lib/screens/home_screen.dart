@@ -11,6 +11,7 @@ import '../widgets/pressable_card.dart';
 import '../widgets/smooth_page_route.dart';
 import '../widgets/venue_image.dart';
 import 'login_screen.dart';
+import 'my_booking_screen.dart';
 import 'owner_booking_screen.dart';
 import 'register_venue_screen.dart';
 import 'venue_detail_screen.dart';
@@ -192,6 +193,65 @@ class _HomeScreenState extends State<HomeScreen> {
       context,
       LoginScreen.routeName,
       (route) => false,
+    );
+  }
+
+  Widget _buildRenterNotificationButton() {
+    return StreamBuilder<int>(
+      stream: _venueService.getUnreadRenterNotificationCount(),
+      builder: (context, snapshot) {
+        final unreadCount = snapshot.data ?? 0;
+        final hasUnread = unreadCount > 0;
+
+        return Stack(
+          clipBehavior: Clip.none,
+          children: [
+            IconButton(
+              tooltip: 'Status Booking Saya',
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  SmoothPageRoute(
+                    page: const MyBookingScreen(),
+                  ),
+                );
+              },
+              icon: Icon(
+                hasUnread
+                    ? Icons.notifications_active_rounded
+                    : Icons.notifications_none_rounded,
+                color: AppColors.primary,
+              ),
+            ),
+            if (hasUnread)
+              Positioned(
+                right: 6,
+                top: 6,
+                child: Container(
+                  padding: const EdgeInsets.all(4),
+                  constraints: const BoxConstraints(
+                    minWidth: 18,
+                    minHeight: 18,
+                  ),
+                  decoration: const BoxDecoration(
+                    color: Colors.red,
+                    shape: BoxShape.circle,
+                  ),
+                  child: Center(
+                    child: Text(
+                      unreadCount > 9 ? '9+' : unreadCount.toString(),
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 10,
+                        fontWeight: FontWeight.w900,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+          ],
+        );
+      },
     );
   }
 
@@ -552,6 +612,13 @@ class _HomeScreenState extends State<HomeScreen> {
                       ],
                     ),
                   ),
+
+                  // Icon notifikasi penyewa:
+                  // Penyewa klik ini untuk melihat status bookingnya.
+                  _buildRenterNotificationButton(),
+
+                  // Icon pesanan masuk owner:
+                  // Owner klik ini untuk melihat pesanan masuk.
                   IconButton(
                     tooltip: 'Pesanan Masuk',
                     onPressed: () {
@@ -567,6 +634,7 @@ class _HomeScreenState extends State<HomeScreen> {
                       color: AppColors.primary,
                     ),
                   ),
+
                   IconButton(
                     tooltip: 'Logout',
                     onPressed: () => _logout(context),
